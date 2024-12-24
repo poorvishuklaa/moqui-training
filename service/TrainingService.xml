@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+    <service verb="create" noun="Training" type="script" authenticate="anonymous-view" location="component://moqui_training/service/TrainingService.groovy">
+        <description>Create a training record with business logic</description>
+        <in-parameters>
+            <parameter name="trainingName" required="true"/>
+            <parameter name="trainingDate"  required="true"/>
+            <parameter name="trainingPrice"  required="true"/>
+            <parameter name="trainingDuration" />
+        </in-parameters>
+        <out-parameters>
+            <parameter name="trainingId" type="id"/>
+        </out-parameters>
+        <actions>
+            <script>
+                if (true) {
+                ec.service.sync().name("create#MoquiTraining")
+                .parameters(context).call()
+
+                if (ec.message.hasError()) return
+                }
+            </script>
+        </actions>
+    </service>
+</services>

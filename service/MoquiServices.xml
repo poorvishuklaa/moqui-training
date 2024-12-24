@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+    <service verb="create" noun="MoquiTraining" type="entity-auto">
+        <in-parameters>
+            <auto-parameters entity-name="MoquiTraining" include="nonpk"/>
+            <parameter name="trainingName" required="true"/>
+            <parameter name="trainingDate" required="true"/>
+        </in-parameters>
+        <out-parameters><parameter name="trainingId"/></out-parameters>
+        <actions>
+            <!-- Validation for trainingDate format -->
+            <if condition="!(context.trainingDate ==~ '\\d{2}/\\d{2}/\\d{4}')">
+                <error message="The trainingDate must follow MM/dd/yyyy format"/>
+            </if>
+        </actions>
+    </service>
+    <!-- inline service -->
+    <service verb="create" noun="MoquiTrainingInline">
+        <in-parameters>
+            <parameter name="trainingName" required="true"/>
+            <parameter name="trainingDate" required="true"/>
+            <parameter name="trainerName"/>
+            <parameter name="trainingLocation"/>
+        </in-parameters>
+        <out-parameters><parameter name="trainingId"/></out-parameters>
+        <actions>
+            <service-call name="create#MoquiTraining" in-map="context"/>
+        </actions>
+
+    </service>
+</services>

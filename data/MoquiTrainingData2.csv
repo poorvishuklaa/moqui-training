@@ -1,0 +1,4 @@
+moqui.training.MoquiTraining,demo
+trainingId,trainingName,trainingDate,trainingPrice,trainingDuration
+6,Java Basics,2024-01-10,499.99,8
+7,Advanced SQL,2024-02-15,699.99,10
