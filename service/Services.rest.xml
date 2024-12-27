@@ -23,22 +23,12 @@
 
     <!--products-->
     <resource name="products" require-authentication="anonymous-all">
-        <method type="post">
-            <entity name="Product" operation="create"/>
-        </method>
-        <method type="get">
-            <entity name="Product" operation="one"/>
-        </method>
+        <method type="post"><entity name="Product" operation="create"/></method>
+        <method type="get"><entity name="Product" operation="list"/></method>
         <id name ="productId">
-            <method type="get">
-                <entity name="Product" operation="one"/>
-            </method>
-            <method type="put">
-                <entity name="Product" operation="update"/>
-            </method>
-            <method type="delete">
-                <entity name="Product" operation="delete"/>
-            </method>
+            <method type="get"><entity name="Product" operation="one"/></method>
+            <method type="put"><entity name="Product" operation="update"/></method>
+            <method type="delete"><entity name="Product" operation="delete"/></method>
         </id>
     </resource>
 

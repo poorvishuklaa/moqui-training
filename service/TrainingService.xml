@@ -1,42 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
-    <!--create-->
-    <service verb="create" noun="Training" type="script" authenticate="anonymous-view" location="component://moqui_training/service/TrainingService.groovy">
-        <description>Create a training record with business logic</description>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+    <!--create without service call as we have used entity auto-->
+    <service verb="create" noun="MoquiTraining" type="entity-auto">
+        <in-parameters><auto-parameters entity-name="MoquiTraining" include="nonpk"/>
+            <parameter name="trainingName" required="true"/>
+            <parameter name="trainingDate" required="true" type="Timestamp" format="MM/dd/yyyy"/>
+        </in-parameters>
+        <out-parameters><parameter name="trainingId"/></out-parameters>
+        <actions>
+            <if condition="!(context.trainingDate ==~ '\\d{2}/\\d{2}/\\d{4}')">
+                <error message="The trainingDate must follow MM/dd/yyyy format"/>
+            </if>
+        </actions>
+
+    </service>
+
+    <!--service type= inline so we have to give service call-->
+    <service verb="create" noun="MoquiTrainingInline">
         <in-parameters>
             <parameter name="trainingName" required="true"/>
-            <parameter name="trainingDate"  required="true"/>
-            <parameter name="trainingPrice"  required="true"/>
-            <parameter name="trainingDuration" />
+            <parameter name="trainingDate" />
+            <parameter name="trainingPrice"/>
+            <parameter name="trainingDuration"/>
         </in-parameters>
         <out-parameters>
-            <parameter name="trainingId" type="id"/>
+            <parameter name="trainingId"/>
         </out-parameters>
         <actions>
-            <script>
-                if (true) {
-                ec.service.sync().name("create#MoquiTraining")
-                .parameters(context).call()
+            <service-call name="create#MoquiTraining" in-map="context" out-map="context"/>
+        </actions>
+    </service>
 
-                if (ec.message.hasError()) return
-                }
-            </script>
+  <!--service type=script -->
+    <service verb="create" noun="MoquiTrainingGroovy" type="script"
+             location="component://moqui-training/service/TrainingService.groovy">
+        <in-parameters>
+            <auto-parameters entity-name="MoquiTraining" include="nonpk"/>
+            <parameter name="trainingName" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="trainingId"/>
+        </out-parameters>
+    </service>
+
+
+   <!--get code-->
+    <service verb="find" noun="TrainingData">
+        <in-parameters>
+            <parameter name="trainingId"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="data" type="list"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="MoquiTraining" list="data">
+                <econdition field-name="trainingId"/>
+                <select-field field-name="trainingName,trainingId,trainingDate"/>
+            </entity-find>
+
         </actions>
     </service>
 
     <!--update-->
-    <service verb="update" noun="Training" type="script" authenticate="anonymous-view" location="component://moqui_training/service/TrainingService.groovy">
-        <description>Update or create a training record based on trainingName or trainingId</description>
+    <service verb="store" noun="UpdateTraining">
+        <description>Create or update MoquiTraining records based on trainingName or trainingId.</description>
         <in-parameters>
-            <parameter name="trainingId"/>
             <parameter name="trainingName" required="true"/>
             <parameter name="trainingDate" required="true"/>
-            <parameter name="trainingPrice" required="true"/>
-            <parameter name="trainingDuration"/>
+            <auto-parameters entity-name="MoquiTraining" include="nonpk"/>
         </in-parameters>
+
         <out-parameters>
-            <parameter name="trainingId" type="id"/>
+            <parameter name="trainingId"/>
         </out-parameters>
+
+        <actions>
+            <entity-find-one entity-name="MoquiTraining" value-field="existingRecord">
+                <field-map field-name="trainingName" from="trainingName"/>
+            </entity-find-one>
+
+
+            <if condition="existingRecord">
+                <then>
+                    <set field="existingRecord.trainingDate" from="trainingDate"/>
+
+                    <set field="existingRecord.trainingName" from="trainingName"/>
+                    <set field="existingRecord.trainingPrice" from="trainingPrice"/>
+                    <set field="existingRecord.trainingDuration" from="trainingDuration"/>
+
+                    <entity-update value-field="existingRecord"/>
+
+
+                    <set field="trainingId" from="existingRecord.trainingId"/>
+                </then>
+                <else>
+                    <service-call name="create#MoquiTraining" in-map="context" out-map="context"/>
+                </else>
+            </if>
+
+
+        </actions>
     </service>
+
 
 </services>
