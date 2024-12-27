@@ -9,4 +9,56 @@
         <field name="trainingDuration" type="number-integer" />
 
     </entity>
+    <!--    Party Entity-->
+    <entity entity-name="Party" package="moqui.training">
+        <field name="partyId" type="id" is-pk="true" />
+        <field name="partyType" type="text-medium" not-null="true" />
+        <field name="firstName" type="text-medium" />
+        <field name="lastName" type="text-medium" />
+    </entity>
+
+    <!--    contact_Mech Entity-->
+    <entity entity-name="ContactMech" package="moqui.training">
+        <field name="contactMechId" type="id"  is-pk="true" />
+        <field name="partyId" type="id" not-null="true" />
+        <field name="streetAddress" type="text-medium" not-null="true" />
+        <field name="city" type="text-medium" />
+        <field name="state" type="text-medium" />
+        <field name="postalCode" type="text-medium" />
+        <relationship type="one" related="Party" >
+        <key-map field-name="partyId"/></relationship>
+    </entity>
+
+     <!--    Product Entity-->
+    <entity entity-name="Product" package="moqui.training" >
+        <field name="productId" type="id" is-pk="true"/>
+        <field name="productName" type="text-medium" not-null="true" />
+        <field name="color" type="text-medium" />
+        <field name="size" type="text-medium" />
+    </entity>
+
+    <!--    OrderHeader-->
+    <entity entity-name="OrderHeader" package="moqui.training" >
+        <field name="orderId" type="id" is-pk="true" />
+        <field name="orderDate" type="date" not-null="true" />
+        <field name="partyId" type="id" not-null="true" />
+        <field name="shippingContactMechId" type="id"/>
+        <field name="billingContactMechId" type="id" />
+        <relationship type="one" related="Party" />
+        <relationship type="one" related="ContactMech">
+        <key-map field-name="shippingContactMechId"/></relationship>
+        <relationship type="one" related="ContactMech" >
+        <key-map field-name="billingContactMechId"/></relationship>
+    </entity>
+
+    <!--    OrderItem-->
+    <entity entity-name="OrderItem" package="moqui.training">
+        <field name="orderItemSeqId" type="id" is-pk="true" />
+        <field name="orderId" type="id" not-null="true" />
+        <field name="productId" type="id"  not-null="true" />
+        <field name="quantity" type="number-integer" not-null="true" />
+        <field name="status" type="text-medium" />
+        <relationship type="one" related="OrderHeader" />
+        <relationship type="one" related="Product" />
+    </entity>
 </entities>

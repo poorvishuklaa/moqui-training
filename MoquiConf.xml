@@ -7,4 +7,8 @@
 <!--            <subscreens-item name="tools" menu-title="Tools" menu-index="99" location="component://tools/screen/Tools.xml"/>-->
 <!--        </screen>-->
 <!--    </screen-facade>-->
+
+    <webapp-list>
+        <webapp name="webroot" require-session-token="false"></webapp>
+    </webapp-list>
 </moqui-conf>

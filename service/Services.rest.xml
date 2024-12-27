@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/rest-api-3.xsd"
+          name="moqui" displayName="Moqui REST API" version="${moqui_version}" >
+
+    <resource name="parties" require-authentication="anonymous-all">
+        <method type="post"><entity name="Party" operation="create"/></method>
+        <method type="get"><entity name="Party" operation="list"/></method>
+
+        <id name ="partyId">
+            <method type="get"><entity name="Party" operation="one"/></method>
+            <method type="put"><entity name="Party" operation="update"/></method>
+            <method type="delete"><entity name="Party" operation="delete"/></method>
+
+            <resource name="contacts" require-authentication="anonymous-all">
+                <method type="post"><entity name="ContactMech" operation="create"/></method>
+                <method type="get"><entity name="ContactMech" operation="one"/></method>
+                <method type="put"><entity name="ContactMech" operation="update"/></method>
+                <method type="delete"><entity name="ContactMech" operation="delete"/></method>
+            </resource>
+        </id>
+    </resource>
+
+    <!--products-->
+    <resource name="products" require-authentication="anonymous-all">
+        <method type="post">
+            <entity name="Product" operation="create"/>
+        </method>
+        <method type="get">
+            <entity name="Product" operation="one"/>
+        </method>
+        <id name ="productId">
+            <method type="get">
+                <entity name="Product" operation="one"/>
+            </method>
+            <method type="put">
+                <entity name="Product" operation="update"/>
+            </method>
+            <method type="delete">
+                <entity name="Product" operation="delete"/>
+            </method>
+        </id>
+    </resource>
+
+    <resource name="orders" require-authentication="anonymous-all">
+
+        <method type="get"><entity name="OrderItem"  operation="list"/></method>
+        <method type="post"   ><entity name="OrderItem" operation="create"/></method>
+        <id name="orderItemSeqId">
+
+            <method type="get"   ><entity name="OrderItem" operation="one"/></method>
+            <method type="delete"   ><entity name="OrderItem" operation="delete"/></method>
+            <method type="put"   ><entity name="OrderItem" operation="store"/></method>
+
+
+        </id>
+
+        <resource name="OrderHeader" require-authentication="anonymous-all">
+
+
+            <method type="post"> <entity name="OrderHeader" operation="create"/></method>
+
+        </resource>
+    </resource>
+</resource>
