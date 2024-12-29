@@ -2,29 +2,35 @@
 
 <resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/rest-api-3.xsd"
           name="moqui" displayName="Moqui REST API" version="${moqui_version}" >
-
+   <!--REST APIs for Party Data-->
     <resource name="parties" require-authentication="anonymous-all">
         <method type="post"><entity name="Party" operation="create"/></method>
         <method type="get"><entity name="Party" operation="list"/></method>
-
+        <!--using party id-->
         <id name ="partyId">
             <method type="get"><entity name="Party" operation="one"/></method>
             <method type="put"><entity name="Party" operation="update"/></method>
             <method type="delete"><entity name="Party" operation="delete"/></method>
-
+           <!--contacts operations-->
             <resource name="contacts" require-authentication="anonymous-all">
                 <method type="post"><entity name="ContactMech" operation="create"/></method>
-                <method type="get"><entity name="ContactMech" operation="one"/></method>
+                <method type="get"><entity name="ContactMech" operation="list"/></method>
                 <method type="put"><entity name="ContactMech" operation="update"/></method>
                 <method type="delete"><entity name="ContactMech" operation="delete"/></method>
             </resource>
         </id>
     </resource>
 
-    <!--products-->
+    <!--All contacts-->
+    <resource name="contacts">
+        <method type="get"><entity name="ContactMech" operation="list"/></method>
+    </resource>
+
+    <!--REST APIs for Product data-->
     <resource name="products" require-authentication="anonymous-all">
         <method type="post"><entity name="Product" operation="create"/></method>
         <method type="get"><entity name="Product" operation="list"/></method>
+        <!--Using id-->
         <id name ="productId">
             <method type="get"><entity name="Product" operation="one"/></method>
             <method type="put"><entity name="Product" operation="update"/></method>
@@ -32,24 +38,40 @@
         </id>
     </resource>
 
+    <!--REST APIs for Orders Data-->
     <resource name="orders" require-authentication="anonymous-all">
+        <method type="get"><entity name="OrderHeader" operation="one"/></method>
 
-        <method type="get"><entity name="OrderItem"  operation="list"/></method>
-        <method type="post"   ><entity name="OrderItem" operation="create"/></method>
-        <id name="orderItemSeqId">
+        <method type="post">
+            <service name="orderservice.create#OrderHeader" />
+        </method>
 
-            <method type="get"   ><entity name="OrderItem" operation="one"/></method>
-            <method type="delete"   ><entity name="OrderItem" operation="delete"/></method>
-            <method type="put"   ><entity name="OrderItem" operation="store"/></method>
+        <method type="get" >
+            <service name="orderservice.find#OrderHeader"/>
+        </method>
 
+        <method type="delete">
+            <service name="orderservice.delete#OrderHeader"/>
+        </method>
 
+        <id name="orderId">
+            <method type="put">
+                <entity name="OrderHeader" operation="store"/>
+            </method>
         </id>
-
-        <resource name="OrderHeader" require-authentication="anonymous-all">
-
-
-            <method type="post"> <entity name="OrderHeader" operation="create"/></method>
-
+<!--        <method type="put">-->
+<!--            <service name="orderservice.update#OrderHeader"/>-->
+<!--        </method>-->
+        <resource name="items" require-authentication="anonymous-all">
+            <method type="post">
+                <service name="OrderService.create#AddItems"  />
+            </method>
         </resource>
+
+
+<!--             Add Order Item -->
+<!--             <method type="post">-->
+<!--            <entity name="OrderItem" operation="create"/>-->
+<!--             </method>-->
     </resource>
 </resource>

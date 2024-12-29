@@ -8,12 +8,11 @@
             <parameter name="trainingDate" required="true" type="Timestamp" format="MM/dd/yyyy"/>
         </in-parameters>
         <out-parameters><parameter name="trainingId"/></out-parameters>
-        <actions>
-            <if condition="!(context.trainingDate ==~ '\\d{2}/\\d{2}/\\d{4}')">
-                <error message="The trainingDate must follow MM/dd/yyyy format"/>
-            </if>
-        </actions>
-
+<!--        <actions>-->
+<!--            <if condition="!(context.trainingDate ==~ '\\d{2}/\\d{2}/\\d{4}')">-->
+<!--                <error message="The trainingDate must follow MM/dd/yyyy format"/>-->
+<!--            </if>-->
+<!--        </actions>-->
     </service>
 
     <!--service type= inline so we have to give service call-->
@@ -54,6 +53,9 @@
             <parameter name="data" type="list"/>
         </out-parameters>
         <actions>
+            <message type="success">
+                hii
+            </message>
             <entity-find entity-name="MoquiTraining" list="data">
                 <econdition field-name="trainingId"/>
                 <select-field field-name="trainingName,trainingId,trainingDate"/>
@@ -71,37 +73,24 @@
             <auto-parameters entity-name="MoquiTraining" include="nonpk"/>
         </in-parameters>
 
-        <out-parameters>
-            <parameter name="trainingId"/>
-        </out-parameters>
-
+        <out-parameters><parameter name="trainingId"/></out-parameters>
         <actions>
             <entity-find-one entity-name="MoquiTraining" value-field="existingRecord">
                 <field-map field-name="trainingName" from="trainingName"/>
             </entity-find-one>
-
-
             <if condition="existingRecord">
                 <then>
                     <set field="existingRecord.trainingDate" from="trainingDate"/>
-
                     <set field="existingRecord.trainingName" from="trainingName"/>
                     <set field="existingRecord.trainingPrice" from="trainingPrice"/>
                     <set field="existingRecord.trainingDuration" from="trainingDuration"/>
-
                     <entity-update value-field="existingRecord"/>
-
-
                     <set field="trainingId" from="existingRecord.trainingId"/>
                 </then>
                 <else>
                     <service-call name="create#MoquiTraining" in-map="context" out-map="context"/>
                 </else>
             </if>
-
-
         </actions>
     </service>
-
-
 </services>

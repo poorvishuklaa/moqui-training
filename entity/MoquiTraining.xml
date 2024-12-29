@@ -48,17 +48,21 @@
         <relationship type="one" related="ContactMech">
         <key-map field-name="shippingContactMechId"/></relationship>
         <relationship type="one" related="ContactMech" >
-        <key-map field-name="billingContactMechId"/></relationship>
+          <key-map field-name="billingContactMechId"/></relationship>
     </entity>
 
     <!--    OrderItem-->
     <entity entity-name="OrderItem" package="moqui.training">
         <field name="orderItemSeqId" type="id" is-pk="true" />
-        <field name="orderId" type="id" not-null="true" />
-        <field name="productId" type="id"  not-null="true" />
+        <field name="orderId" type="id" />
+        <field name="productId" type="id"/>
         <field name="quantity" type="number-integer" not-null="true" />
         <field name="status" type="text-medium" />
-        <relationship type="one" related="OrderHeader" />
-        <relationship type="one" related="Product" />
+        <relationship type="one" related="OrderHeader">
+        <key-map field-name="orderId"/>
+        </relationship>
+        <relationship type="one" related="Product" >
+                <key-map field-name="productId" />
+        </relationship>
     </entity>
 </entities>
