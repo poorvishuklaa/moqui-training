@@ -40,6 +40,18 @@ PUT /Product
 DELETE /Product
 ![Screenshot 2024-12-29 154218](https://github.com/user-attachments/assets/966aa23a-5015-4450-94b0-57aee5def2a0)
 
+POST /orders
+![Screenshot 2024-12-31 103338](https://github.com/user-attachments/assets/8eba8a2a-afe0-4c4f-b093-cb74e60012b1)
 
+GET /orders
+![Screenshot 2024-12-31 105459](https://github.com/user-attachments/assets/df870902-8fab-47ff-92ef-e75bbf052449)
 
+PUT /orders
+![Screenshot 2024-12-31 112514](https://github.com/user-attachments/assets/8c606f84-cb8a-4f20-baa9-790f2efd3431)
+
+DELETE /orders
+![Screenshot 2024-12-31 112559](https://github.com/user-attachments/assets/40ca0aeb-c2d4-4783-bd1a-46a9ce66c37f)
+
+ADD order/Item
+![Screenshot 2024-12-31 114259](https://github.com/user-attachments/assets/a54ba621-62a0-481a-bb7e-1053e574d733)
 
