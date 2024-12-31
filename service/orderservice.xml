@@ -2,18 +2,15 @@
 
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+ <!--non pk so that it takes all non primary attributes-->
 
-    <!--Create an Order: POST /orders-->
     <service verb="create" noun="OrderHeader">
         <in-parameters>
-            <parameter name="orderDate"/>
-            <parameter name="partyId"/>
-            <parameter name="shippingContactMechId"/>
-            <parameter name="billingContactMechId"/>
-            <parameter name="items" type="List">
-                <parameter name="orderItem" type="Map">
-                    <parameter name="productId"/>
-                    <parameter name="quantity"/>
+            <auto-parameters entity-name="OrderHeader" include="nonpk" required="true"/>
+            <parameter name="listOfItems" type="List" required="true">
+                <parameter name="orderItem" type="Map" required="true">
+                    <parameter name="productId" required="true"/>
+                    <parameter name="quantity" required="true"/>
                     <parameter name="status"/>
                 </parameter>
             </parameter>
@@ -22,32 +19,22 @@
             <parameter name="orderId"/>
         </out-parameters>
         <actions>
-            <service-call name="create#OrderHeader" in-map="context" out-map="mp"/>
-            <iterate list="items" entry="item">
-                <set field="item.orderId" value="${mp.orderId}"/>
+            <service-call name="create#OrderHeader" in-map="context" out-map="context"/>
+            <iterate list="listOfItems" entry="item">
+                <set field="item.orderId" from="context.orderId"/>
                 <service-call name="create#OrderItem" in-map="item"/>
             </iterate>
         </actions>
     </service>
-
     <service verb="create" noun="OrderItem" type="entity-auto">
         <in-parameters>
             <auto-parameters entity-name="OrderItem" include="nonpk"/>
+            <parameter name="quantity" required="true"/>
         </in-parameters>
         <out-parameters>
-        <!--<parameter name="orderItemSeqId"/>-->
-            <parameter name="orderId"/>
+            <parameter name="orderItemSeqId"/>
         </out-parameters>
     </service>
-
-<!--    <service verb="create" noun="OrderHeader" type="entity-auto">-->
-<!--        <in-parameters>-->
-<!--            <auto-parameters entity-name="OrderItem" include="nonpk"/>-->
-<!--        </in-parameters>-->
-<!--        <out-parameters>-->
-<!--            <parameter name="orderId"/>-->
-<!--        </out-parameters>-->
-<!--    </service>-->
 
     <!--Find an order -->
     <service verb="find" noun="OrderHeader">
@@ -124,7 +111,6 @@
                 <service-call name="create#OrderItem" in-map="item"/>
             </iterate>
         </actions>
-
     </service>
 
 </services>

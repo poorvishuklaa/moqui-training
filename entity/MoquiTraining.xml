@@ -48,6 +48,7 @@
         <relationship type="one" related="ContactMech">
         <key-map field-name="shippingContactMechId"/></relationship>
         <relationship type="one" related="ContactMech" >
+
           <key-map field-name="billingContactMechId"/></relationship>
     </entity>
 

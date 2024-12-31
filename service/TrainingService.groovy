@@ -5,7 +5,7 @@ training.create() //inserts new record into database
 
 // Groovy code snippet is used in the Moqui framework to
 // create a new record in the MoquiTraining entity
- def training = ec.entity.makeValue("MoquiTraining")
+// def training = ec.entity.makeValue("MoquiTraining")
 //Purpose: Creates a new entity value object for the MoquiTraining entity.
 //Explanation:
 //ec.entity: This is the EntityFacade object from the Moqui framework,
